@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { envConfig } from "./config/env.config.js";
 import connectWithRetry from "./database/connection.js";
 import { DatabaseInitializer } from "./database/init.js";
@@ -7,6 +8,7 @@ import { createUserRouter } from "./routes/user.routes.js";
 const app = express();
 const port = envConfig.port;
 
+app.use(cors());
 app.use(express.json());
 
 const startServer = async () => {
