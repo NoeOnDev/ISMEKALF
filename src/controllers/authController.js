@@ -15,7 +15,6 @@ export class AuthController {
         password,
       });
 
-      // Excluimos la contraseña de la respuesta
       const { password: _, ...userWithoutPassword } = user.toJSON();
 
       res.status(201).json({
