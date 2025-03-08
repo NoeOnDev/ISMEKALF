@@ -31,9 +31,15 @@ export class AuthController {
 
   async login(req, res) {
     try {
-      const { email, password } = req.body;
+      const { emailOrUsername, password } = req.body;
 
-      const user = await userService.login(email, password);
+      if (!emailOrUsername || !password) {
+        return res.status(400).json({
+          message: "Por favor proporcione un email/username y contraseña",
+        });
+      }
+
+      const user = await userService.login(emailOrUsername, password);
 
       const token = jwt.sign({ id: user.id }, envConfig.jwt.secret, {
         expiresIn: envConfig.jwt.accessExpiration,
@@ -41,10 +47,17 @@ export class AuthController {
 
       const { password: _, ...userWithoutPassword } = user.toJSON();
 
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 3600000,
+        path: "/",
+      });
+
       res.json({
         message: "Inicio de sesión exitoso",
         user: userWithoutPassword,
-        token,
       });
     } catch (error) {
       res.status(401).json({
@@ -52,5 +65,16 @@ export class AuthController {
         error: error.message,
       });
     }
+  }
+
+  async logout(req, res) {
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+
+    res.json({
+      message: "Sesión cerrada exitosamente",
+    });
   }
 }
