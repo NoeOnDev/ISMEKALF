@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import { envConfig } from "./config/env.config.js";
-import connectWithRetry from "./database/connection.js";
-import { DatabaseInitializer } from "./database/init.js";
-import { createUserRouter } from "./routes/user.routes.js";
+import { envConfig } from "./_config/env.config.js";
+import { sequelize } from "./_config/db.config.js";
+import "./models/indexModels.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 const port = envConfig.port;
@@ -11,17 +11,12 @@ const port = envConfig.port;
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
+
 const startServer = async () => {
   try {
-    const connection = await connectWithRetry();
-
-    const dbInitializer = new DatabaseInitializer(connection);
-    await dbInitializer.initializeTables();
-
-    app.locals.db = connection;
-    app.locals.models = dbInitializer.getModels();
-
-    app.use("/api/users", createUserRouter(connection));
+    await sequelize.sync({ force: true });
+    console.log("✅ Base de datos sincronizada");
 
     app.listen(port, () => {
       console.log(`🚀 Servidor corriendo en el puerto ${port}`);
@@ -33,11 +28,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-process.on("SIGINT", async () => {
-  if (app.locals.db) {
-    await app.locals.db.end();
-    console.log("Conexión a la base de datos cerrada");
-  }
-  process.exit(0);
-});

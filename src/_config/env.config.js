@@ -12,7 +12,6 @@ export const envConfig = {
   jwt: {
     secret: process.env.JWT_SECRET,
     accessExpiration: process.env.JWT_ACCESS_EXPIRES,
-    refreshExpiration: process.env.JWT_REFRESH_EXPIRES,
   },
   client: {
     url: process.env.CLIENT_URL,
