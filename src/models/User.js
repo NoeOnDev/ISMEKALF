@@ -28,6 +28,11 @@ const User = sequelize.define(
         notEmpty: true,
       },
     },
+    role: {
+      type: DataTypes.ENUM('coordinador', 'almacen'),
+      allowNull: false,
+      defaultValue: 'almacen'
+    }
   },
   {
     hooks: {

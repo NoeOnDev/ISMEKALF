@@ -3,7 +3,13 @@ import { Op } from "sequelize";
 
 export class UserService {
   async register(userData) {
-    return await User.create(userData);
+    const usersCount = await User.count();
+    const role = usersCount === 0 ? "coordinador" : "almacen";
+
+    return await User.create({
+      ...userData,
+      role,
+    });
   }
 
   async login(emailOrUsername, password) {
@@ -29,5 +35,10 @@ export class UserService {
     return await User.findByPk(id, {
       attributes: { exclude: ["password"] },
     });
+  }
+
+  async isCoordinador(userId) {
+    const user = await this.findById(userId);
+    return user && user.role === "coordinador";
   }
 }
