@@ -5,6 +5,7 @@ import { envConfig } from "./_config/env.config.js";
 import { sequelize } from "./_config/db.config.js";
 import "./models/indexModels.js";
 import authRoutes from "./routes/authRoutes.js";
+import brandRoutes from "./routes/brandRoutes.js";
 
 const app = express();
 const port = envConfig.port;
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/brands", brandRoutes);
 
 const startServer = async () => {
   try {
