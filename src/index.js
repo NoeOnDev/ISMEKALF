@@ -6,6 +6,8 @@ import { sequelize } from "./_config/db.config.js";
 import "./models/indexModels.js";
 import authRoutes from "./routes/authRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
+import providerRoutes from "./routes/providerRoutes.js";
+import groupRoutes from "./routes/groupRoutes.js";
 
 const app = express();
 const port = envConfig.port;
@@ -21,6 +23,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/brands", brandRoutes);
+app.use("/api/providers", providerRoutes);
+app.use("/api/groups", groupRoutes);
 
 const startServer = async () => {
   try {
