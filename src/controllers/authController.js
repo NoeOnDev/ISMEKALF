@@ -5,6 +5,30 @@ import { envConfig } from "../_config/env.config.js";
 const userService = new UserService();
 
 export class AuthController {
+  async registerFirst(req, res) {
+    try {
+      const { username, email, password } = req.body;
+
+      const user = await userService.registerFirst({
+        username,
+        email,
+        password,
+      });
+
+      const { password: _, ...userWithoutPassword } = user.toJSON();
+
+      res.status(201).json({
+        message: "Coordinador registrado exitosamente",
+        user: userWithoutPassword,
+      });
+    } catch (error) {
+      res.status(400).json({
+        message: "Error al registrar coordinador",
+        error: error.message,
+      });
+    }
+  }
+
   async register(req, res) {
     try {
       const { username, email, password } = req.body;

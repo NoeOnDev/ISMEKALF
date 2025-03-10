@@ -2,13 +2,22 @@ import { User } from "../models/indexModels.js";
 import { Op } from "sequelize";
 
 export class UserService {
-  async register(userData) {
+  async registerFirst(userData) {
     const usersCount = await User.count();
-    const role = usersCount === 0 ? "coordinador" : "almacen";
+    if (usersCount > 0) {
+      throw new Error("Ya existe un coordinador registrado");
+    }
 
     return await User.create({
       ...userData,
-      role,
+      role: "coordinador",
+    });
+  }
+
+  async register(userData) {
+    return await User.create({
+      ...userData,
+      role: "almacen",
     });
   }
 
