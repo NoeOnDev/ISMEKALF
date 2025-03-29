@@ -31,12 +31,16 @@ class AuthController extends Controller
             'image' => $request->image,
         ]);
 
+        // Enviar correo de verificación
+        $user->sendEmailVerificationNotification();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => true,
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'message' => 'Se ha enviado un enlace de verificación a tu correo electrónico.'
         ], 201);
     }
 
@@ -87,6 +91,68 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    /**
+     * Verificar correo electrónico
+     */
+    public function verify(Request $request)
+    {
+        $user = User::find($request->route('id'));
+        $frontendUrl = config('app.frontend_url', 'http://localhost:5173');
+
+        // Validamos el hash y el usuario
+        if (!$user || !hash_equals(
+            (string) $request->route('hash'),
+            sha1($user->getEmailForVerification())
+        )) {
+            // En caso de error, redirigimos al frontend con un parámetro de error
+            return redirect($frontendUrl . '/verificacion?estado=error');
+        }
+
+        // Si ya está verificado
+        if ($user->hasVerifiedEmail()) {
+            return redirect($frontendUrl . '/verificacion?estado=ya-verificado');
+        }
+
+        // Marcamos como verificado
+        $user->markEmailAsVerified();
+
+        // Redireccionamos al frontend con estado exitoso
+        return redirect($frontendUrl . '/verificacion?estado=exito');
+    }
+
+    /**
+     * Reenviar el correo de verificación
+     */
+    public function resendVerification(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró un usuario con ese correo electrónico'
+            ], 404);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'El correo ya ha sido verificado'
+            ]);
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Se ha reenviado el enlace de verificación'
         ]);
     }
 }
