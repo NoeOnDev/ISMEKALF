@@ -131,16 +131,42 @@ class ProductController extends Controller
 
         $messages = [
             'name.required' => 'El nombre del producto es obligatorio.',
-            // Otros mensajes de validación...
+            'quantity.required' => 'La cantidad es obligatoria.',
+            'quantity.integer' => 'La cantidad debe ser un número entero.',
+            'quantity.min' => 'La cantidad no puede ser negativa.',
+            'brand_id.exists' => 'La marca seleccionada no existe en la base de datos.',
+            'supplier_id.exists' => 'El proveedor seleccionado no existe en la base de datos.',
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.max' => 'El tamaño máximo de la imagen es 2MB.',
         ];
 
         $validated = $request->validate([
-            // Mismas reglas que en el método store
+            // Sección 1: Datos Generales y de Identificación
             'name' => 'required|string|max:255',
-            // ...otros campos
+            'model' => 'nullable|string|max:100',
+            'cb_key' => 'nullable|string|max:100',
+            'serial_number' => 'nullable|string|max:100',
+            'batch' => 'nullable|string|max:100',
+            'group' => 'nullable|string|max:100',
+
+            // Sección 2: Datos de Clasificación y Origen
+            'brand_id' => 'nullable|exists:brands,id',
+            'specialty_area' => 'nullable|string|max:100',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'brand_reference' => 'nullable|string|max:100',
+
+            // Sección 3: Datos Operativos y Adicionales
+            'location' => 'nullable|string|max:100',
+            'manufacturer_unit' => 'nullable|string|max:50',
+            'freight_company' => 'nullable|string|max:100',
+            'freight_cost' => 'nullable|numeric|min:0',
+            'expiration_date' => 'nullable|date',
+            'quantity' => 'required|integer|min:0',
+            'description' => 'nullable|string|max:1000',
             'image' => 'nullable|image|max:2048',
         ], $messages);
 
+        // Manejar la imagen
         if ($request->hasFile('image')) {
             // Eliminar imagen anterior si existe
             if ($product->image_path) {
@@ -151,6 +177,7 @@ class ProductController extends Controller
             $validated['image_path'] = $path;
         }
 
+        // Actualizar el producto
         $product->update($validated);
 
         return redirect()->route('products.index')
