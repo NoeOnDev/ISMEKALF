@@ -29,9 +29,10 @@
                         {{ __('Usuarios') }}
                     </x-nav-link>
                     @endif
-                    <x-nav-link :href="route('inventory')" :active="request()->routeIs('inventory')">
+
+                    {{--<x-nav-link :href="route('inventory')" :active="request()->routeIs('inventory')">
                         {{ __('Inventario') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                 </div>
             </div>
 
