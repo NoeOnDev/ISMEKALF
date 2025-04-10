@@ -36,6 +36,36 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'roles'));
     }
 
+    // Método para mostrar el formulario de creación
+    public function create()
+    {
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
+    }
+
+    // Método para procesar la creación
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['required', 'array'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Asignar roles seleccionados
+        $user->syncRoles($request->roles);
+
+        return redirect()->route('admin.users')
+            ->with('success', 'Usuario creado correctamente.');
+    }
+
     public function edit(User $user)
     {
         $roles = Role::all();

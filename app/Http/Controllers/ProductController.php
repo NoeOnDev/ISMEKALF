@@ -34,10 +34,12 @@ class ProductController extends Controller
             $query->where('supplier_id', $request->supplier);
         }
 
-        // Si el usuario no es administrador, solo ve productos que él creó
-        if (Auth::user()->hasRole('almacen') && !Auth::user()->hasRole('administrador')) {
-            $query->where('created_by', Auth::id());
-        }
+        // Solo los administradores pueden ver todos los productos
+        // Los usuarios de almacén pueden ver todos los productos, pero solo editar los suyos
+        // Esta línea se elimina o comenta
+        // if (Auth::user()->hasRole('almacen') && !Auth::user()->hasRole('administrador')) {
+        //     $query->where('created_by', Auth::id());
+        // }
 
         $products = $query->latest()->paginate(10)->withQueryString();
         $brands = Brand::where('active', true)->orderBy('name')->get();

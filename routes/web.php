@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     // Rutas para administradores
     Route::middleware('role:administrador')->group(function () {
         Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+        Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create'); // NUEVA RUTA
+        Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store'); // NUEVA RUTA
         Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
         Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
