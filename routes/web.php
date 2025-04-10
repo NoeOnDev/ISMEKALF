@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Redireccionar la ruta principal al login
@@ -36,6 +38,19 @@ Route::middleware('auth')->group(function () {
         })->name('inventory');
 
         Route::resource('products', ProductController::class);
+    });
+
+    // Rutas para clientes y remisiones
+    Route::middleware('role:administrador|almacen')->group(function () {
+        // Gestión de clientes
+        Route::resource('clients', ClientController::class);
+
+        // Gestión de remisiones (proceso de salida de productos)
+        Route::get('/orders/create/step1', [OrderController::class, 'createStep1'])->name('orders.create.step1');
+        Route::post('/orders/create/step2', [OrderController::class, 'storeStep1'])->name('orders.store.step1');
+        Route::get('/orders/create/step2', [OrderController::class, 'createStep2'])->name('orders.create.step2');
+        Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
+        Route::resource('orders', OrderController::class)->except(['create', 'store']);
     });
 });
 
