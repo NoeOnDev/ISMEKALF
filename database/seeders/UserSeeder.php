@@ -28,12 +28,5 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $almacen->assignRole('almacen');
-
-        // Usuario de prueba (sin rol asignado)
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-        ]);
     }
 }

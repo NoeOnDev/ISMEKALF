@@ -77,10 +77,11 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagen</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marca</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clave CB</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referencia Marca</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                                 </tr>
                             </thead>
@@ -88,17 +89,31 @@
                                 @forelse ($products as $product)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
-                                        <div class="text-sm text-gray-500">{{ $product->model }}</div>
+                                        @if($product->image_path)
+                                            <div class="cursor-pointer" onclick="openTableImageModal('{{ asset('storage/' . $product->image_path) }}')">
+                                                <img src="{{ asset('storage/' . $product->image_path) }}"
+                                                     alt="{{ $product->name }}"
+                                                     class="h-16 w-16 object-cover rounded"
+                                                     title="Clic para ampliar">
+                                            </div>
+                                        @else
+                                            <div class="h-16 w-16 bg-gray-100 flex items-center justify-center rounded">
+                                                <span class="text-gray-400 text-xs">Sin imagen</span>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $product->brand->name ?? 'N/A' }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
+                                        <div class="text-sm text-gray-500">{{ $product->model ?? 'N/A' }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">{{ $product->quantity }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $product->location ?? 'N/A' }}</div>
+                                        <div class="text-sm text-gray-900">{{ $product->cb_key ?? 'N/A' }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ $product->brand_reference ?? 'N/A' }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('products.show', $product) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
@@ -118,7 +133,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
                                         No hay productos registrados.
                                     </td>
                                 </tr>
@@ -136,3 +151,30 @@
         </div>
     </div>
 </x-app-layout>
+
+<!-- Modal para imágenes en tabla de productos -->
+<div id="tableImageModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 overflow-auto">
+    <div class="sticky top-0 w-full flex justify-end p-4">
+        <button onclick="closeTableImageModal()" class="text-white bg-gray-800 rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-700">
+            &times;
+        </button>
+    </div>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="max-w-screen-xl max-h-full overflow-auto">
+            <img id="tableModalImage" src="" alt="Imagen ampliada" class="max-w-full">
+        </div>
+    </div>
+</div>
+
+<script>
+function openTableImageModal(imageSrc) {
+    document.getElementById('tableModalImage').src = imageSrc;
+    document.getElementById('tableImageModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTableImageModal() {
+    document.getElementById('tableImageModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+</script>
