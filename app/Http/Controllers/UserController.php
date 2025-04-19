@@ -17,15 +17,15 @@ class UserController extends Controller
         // Búsqueda por nombre o email
         if ($request->has('search') && $request->search != '') {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('email', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('email', 'like', '%' . $searchTerm . '%');
             });
         }
 
         // Filtro por rol
         if ($request->has('role') && $request->role != '') {
-            $query->whereHas('roles', function($q) use ($request) {
+            $query->whereHas('roles', function ($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
@@ -43,14 +43,14 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    // Método para procesar la creación
+    // Actualizar método store
     public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'roles' => ['required', 'array'],
+            'role' => ['required', 'string', 'exists:roles,name'],
         ]);
 
         $user = User::create([
@@ -59,8 +59,8 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Asignar roles seleccionados
-        $user->syncRoles($request->roles);
+        // Asignar el rol seleccionado
+        $user->assignRole($request->role);
 
         return redirect()->route('admin.users')
             ->with('success', 'Usuario creado correctamente.');
@@ -72,21 +72,39 @@ class UserController extends Controller
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
+    // Actualizar método update
     public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'roles' => ['required', 'array'],
+            'role' => ['required', 'string', 'exists:roles,name'],
         ]);
+
+        // Validación para evitar que un administrador cambie su propio rol
+        if ($user->id === auth()->id() && $user->hasRole('administrador') && $request->role !== 'administrador') {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'No puedes cambiar tu propio rol de administrador.');
+        }
+
+        // Validar que no sea el último administrador
+        if ($user->hasRole('administrador') && $request->role !== 'administrador') {
+            $adminCount = User::role('administrador')->count();
+            if ($adminCount <= 1) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'No puedes cambiar el rol. Este es el último usuario administrador.');
+            }
+        }
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
         ]);
 
-        // Actualizar roles
-        $user->syncRoles($request->roles);
+        // Actualizar rol (primero quitar todos y luego asignar el nuevo)
+        $user->syncRoles([$request->role]);
 
         return redirect()->route('admin.users')
             ->with('success', 'Usuario actualizado correctamente.');

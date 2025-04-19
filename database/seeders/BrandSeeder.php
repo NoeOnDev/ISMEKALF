@@ -12,47 +12,30 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        // Lista de marcas de ejemplo para nuestro inventario
         $brands = [
             [
-                'name' => 'Truper',
-                'description' => 'Herramientas y equipos de trabajo'
+                'name' => 'HealthTech',
+                'description' => 'Tecnología de salud avanzada para hospitales'
             ],
             [
-                'name' => 'Makita',
-                'description' => 'Herramientas eléctricas profesionales'
+                'name' => 'BioMed',
+                'description' => 'Equipos biomédicos de última generación'
             ],
             [
-                'name' => 'DeWalt',
-                'description' => 'Herramientas eléctricas y accesorios'
+                'name' => 'CarePlus',
+                'description' => 'Soluciones de cuidado médico integral'
             ],
             [
-                'name' => 'Bosch',
-                'description' => 'Herramientas y accesorios de precisión'
+                'name' => 'MedTech Solutions',
+                'description' => 'Equipos médicos de monitoreo y diagnóstico de alta precisión'
             ],
             [
-                'name' => 'Milwaukee',
-                'description' => 'Herramientas eléctricas de alta calidad'
+                'name' => 'SurgicalTech',
+                'description' => 'Instrumental quirúrgico de calidad superior'
             ],
             [
-                'name' => 'Urrea',
-                'description' => 'Herramientas manuales y de precisión'
-            ],
-            [
-                'name' => 'Stanley',
-                'description' => 'Herramientas manuales y de medición'
-            ],
-            [
-                'name' => '3M',
-                'description' => 'Productos de seguridad y cintas'
-            ],
-            [
-                'name' => 'Pretul',
-                'description' => 'Herramientas básicas y accesorios'
-            ],
-            [
-                'name' => 'Rotoplas',
-                'description' => 'Productos para almacenamiento de agua'
+                'name' => 'PharmaPro',
+                'description' => 'Productos farmacéuticos de alta calidad para uso hospitalario'
             ],
         ];
 

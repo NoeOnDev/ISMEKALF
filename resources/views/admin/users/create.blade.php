@@ -4,7 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Crear Nuevo Usuario') }}
             </h2>
-            <a href="{{ route('admin.users') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('admin.users') }}"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                 Volver al listado
             </a>
         </div>
@@ -20,45 +21,51 @@
                         <!-- Name -->
                         <div class="mt-4">
                             <x-input-label for="name" :value="__('Nombre')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
+                                :value="old('name')" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <!-- Email Address -->
                         <div class="mt-4">
                             <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                :value="old('email')" required />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
                         <!-- Password -->
                         <div class="mt-4">
                             <x-input-label for="password" :value="__('Contraseña')" />
-                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                                required />
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mt-4">
                             <x-input-label for="password_confirmation" :value="__('Confirmar Contraseña')" />
-                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
+                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                                name="password_confirmation" required />
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
 
                         <!-- Roles -->
                         <div class="mt-4">
-                            <x-input-label :value="__('Roles')" />
+                            <x-input-label :value="__('Rol')" />
                             <div class="mt-2 space-y-2">
-                                @foreach($roles as $role)
+                                @foreach ($roles as $role)
                                     <div class="flex items-center">
-                                        <input type="checkbox" id="role_{{ $role->id }}" name="roles[]" value="{{ $role->name }}"
-                                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                            {{ $role->name === 'almacen' ? 'checked' : '' }}>
-                                        <label for="role_{{ $role->id }}" class="ml-2 text-gray-700">{{ ucfirst($role->name) }}</label>
+                                        <input type="radio" id="role_{{ $role->id }}" name="role"
+                                            value="{{ $role->name }}"
+                                            class="text-indigo-600 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                            {{ $role->name === 'almacen' ? 'checked' : '' }} required>
+                                        <label for="role_{{ $role->id }}"
+                                            class="ml-2 text-gray-700">{{ ucfirst($role->name) }}</label>
                                     </div>
                                 @endforeach
                             </div>
-                            <x-input-error :messages="$errors->get('roles')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('role')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
