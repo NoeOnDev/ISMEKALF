@@ -38,7 +38,6 @@ Route::middleware('auth')->group(function () {
         })->name('inventory');
 
         Route::resource('products', ProductController::class);
-        Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
     });
 
     // Rutas para clientes y remisiones
@@ -53,6 +52,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
     });
+});
+
+// Dentro del grupo de rutas que requiere autenticación
+Route::middleware(['auth', 'role:administrador'])->group(function () {
+    Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
 });
 
 require __DIR__ . '/auth.php';

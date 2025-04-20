@@ -5,9 +5,11 @@
                 {{ __('Productos') }}
             </h2>
             <div class="flex space-x-2">
-                <button onclick="openExportModal()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                    <i class="fas fa-file-export mr-1"></i> Exportar CSV
-                </button>
+                @if(auth()->user()->hasRole('administrador'))
+                    <button onclick="openExportModal()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-file-export mr-1"></i> Exportar CSV
+                    </button>
+                @endif
                 <a href="{{ route('products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Nuevo Producto
                 </a>

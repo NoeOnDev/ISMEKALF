@@ -213,6 +213,12 @@ class ProductController extends Controller
      */
     public function export(Request $request)
     {
+        // Verificar que solo administradores puedan exportar
+        if (!Auth::user()->hasRole('administrador')) {
+            return redirect()->route('products.index')
+                ->with('error', 'No tienes permisos para exportar productos.');
+        }
+
         $request->validate([
             'fields' => 'required|array|min:1',
             'fields.*' => 'string',
