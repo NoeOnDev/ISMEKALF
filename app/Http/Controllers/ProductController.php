@@ -18,11 +18,11 @@ class ProductController extends Controller
         // Filtros aplicados desde la Historia de Usuario 3.3
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('serial_number', 'like', "%{$search}%")
-                  ->orWhere('cb_key', 'like', "%{$search}%");
+                    ->orWhere('model', 'like', "%{$search}%")
+                    ->orWhere('serial_number', 'like', "%{$search}%")
+                    ->orWhere('cb_key', 'like', "%{$search}%");
             });
         }
 
@@ -203,5 +203,180 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')
             ->with('success', 'Producto eliminado correctamente.');
+    }
+
+    /**
+     * Exportar productos a CSV.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export(Request $request)
+    {
+        $request->validate([
+            'fields' => 'required|array|min:1',
+            'fields.*' => 'string',
+        ]);
+
+        $fields = $request->fields;
+
+        // Obtener todos los productos con sus relaciones
+        $products = Product::with(['brand', 'supplier', 'creator'])->get();
+
+        // Generar el nombre del archivo
+        $filename = 'productos_' . date('Y-m-d_His') . '.csv';
+
+        // Crear una respuesta para el archivo CSV
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        return response()->stream(function () use ($products, $fields) {
+            // Abrir salida para escritura
+            $output = fopen('php://output', 'w');
+
+            // Agregar BOM (Byte Order Mark) para la correcta interpretación de caracteres UTF-8
+            fputs($output, "\xEF\xBB\xBF");
+
+            // Definir encabezados del CSV basados en los campos seleccionados
+            $headers = [];
+
+            foreach ($fields as $field) {
+                switch ($field) {
+                    case 'name':
+                        $headers[] = 'Nombre';
+                        break;
+                    case 'model':
+                        $headers[] = 'Modelo';
+                        break;
+                    case 'cb_key':
+                        $headers[] = 'Clave CB';
+                        break;
+                    case 'serial_number':
+                        $headers[] = 'Número de Serie';
+                        break;
+                    case 'batch':
+                        $headers[] = 'Lote';
+                        break;
+                    case 'group':
+                        $headers[] = 'Grupo';
+                        break;
+                    case 'brand':
+                        $headers[] = 'Marca';
+                        break;
+                    case 'specialty_area':
+                        $headers[] = 'Área/Especialidad';
+                        break;
+                    case 'supplier':
+                        $headers[] = 'Proveedor';
+                        break;
+                    case 'brand_reference':
+                        $headers[] = 'Referencia Marca';
+                        break;
+                    case 'location':
+                        $headers[] = 'Ubicación';
+                        break;
+                    case 'manufacturer_unit':
+                        $headers[] = 'Unidad de Medida';
+                        break;
+                    case 'freight_company':
+                        $headers[] = 'Fletera';
+                        break;
+                    case 'freight_cost':
+                        $headers[] = 'Costo de Flete';
+                        break;
+                    case 'expiration_date':
+                        $headers[] = 'Fecha de Caducidad';
+                        break;
+                    case 'quantity':
+                        $headers[] = 'Cantidad';
+                        break;
+                    case 'description':
+                        $headers[] = 'Descripción';
+                        break;
+                    case 'created_at':
+                        $headers[] = 'Fecha de Creación';
+                        break;
+                    case 'creator':
+                        $headers[] = 'Creado por';
+                        break;
+                }
+            }
+
+            // Escribir encabezados
+            fputcsv($output, $headers);
+
+            // Escribir datos de productos
+            foreach ($products as $product) {
+                $row = [];
+
+                foreach ($fields as $field) {
+                    switch ($field) {
+                        case 'name':
+                            $row[] = $product->name;
+                            break;
+                        case 'model':
+                            $row[] = $product->model ?? '';
+                            break;
+                        case 'cb_key':
+                            $row[] = $product->cb_key ?? '';
+                            break;
+                        case 'serial_number':
+                            $row[] = $product->serial_number ?? '';
+                            break;
+                        case 'batch':
+                            $row[] = $product->batch ?? '';
+                            break;
+                        case 'group':
+                            $row[] = $product->group ?? '';
+                            break;
+                        case 'brand':
+                            $row[] = $product->brand->name ?? '';
+                            break;
+                        case 'specialty_area':
+                            $row[] = $product->specialty_area ?? '';
+                            break;
+                        case 'supplier':
+                            $row[] = $product->supplier->name ?? '';
+                            break;
+                        case 'brand_reference':
+                            $row[] = $product->brand_reference ?? '';
+                            break;
+                        case 'location':
+                            $row[] = $product->location ?? '';
+                            break;
+                        case 'manufacturer_unit':
+                            $row[] = $product->manufacturer_unit ?? '';
+                            break;
+                        case 'freight_company':
+                            $row[] = $product->freight_company ?? '';
+                            break;
+                        case 'freight_cost':
+                            $row[] = $product->freight_cost ?? '';
+                            break;
+                        case 'expiration_date':
+                            $row[] = $product->expiration_date ? $product->expiration_date->format('d/m/Y') : '';
+                            break;
+                        case 'quantity':
+                            $row[] = $product->quantity;
+                            break;
+                        case 'description':
+                            $row[] = $product->description ?? '';
+                            break;
+                        case 'created_at':
+                            $row[] = $product->created_at->format('d/m/Y H:i');
+                            break;
+                        case 'creator':
+                            $row[] = $product->creator->name ?? '';
+                            break;
+                    }
+                }
+
+                fputcsv($output, $row);
+            }
+
+            fclose($output);
+        }, 200, $headers);
     }
 }

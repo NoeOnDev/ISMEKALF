@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         })->name('inventory');
 
         Route::resource('products', ProductController::class);
+        Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
     });
 
     // Rutas para clientes y remisiones

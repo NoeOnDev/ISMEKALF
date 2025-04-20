@@ -4,9 +4,14 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Productos') }}
             </h2>
-            <a href="{{ route('products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Nuevo Producto
-            </a>
+            <div class="flex space-x-2">
+                <button onclick="openExportModal()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-file-export mr-1"></i> Exportar CSV
+                </button>
+                <a href="{{ route('products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Nuevo Producto
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -177,4 +182,155 @@ function closeTableImageModal() {
     document.getElementById('tableImageModal').classList.add('hidden');
     document.body.style.overflow = '';
 }
+</script>
+
+<!-- Modal para seleccionar campos de exportación -->
+<div id="exportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-auto">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Exportar productos a CSV</h3>
+                    <button type="button" onclick="closeExportModal()" class="text-gray-500 hover:text-gray-800">
+                        <span class="text-2xl">&times;</span>
+                    </button>
+                </div>
+
+                <form action="{{ route('products.export') }}" method="POST">
+                    @csrf
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 mb-2">Seleccione los campos que desea exportar:</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <!-- Sección 1: Datos Generales -->
+                            <div class="col-span-2 mt-2 mb-1">
+                                <span class="font-medium text-gray-700">Datos Generales:</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="name" id="field_name" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked>
+                                <label for="field_name" class="ml-2 text-sm text-gray-700">Nombre</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="model" id="field_model" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked>
+                                <label for="field_model" class="ml-2 text-sm text-gray-700">Modelo</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="cb_key" id="field_cb_key" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_cb_key" class="ml-2 text-sm text-gray-700">Clave CB</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="serial_number" id="field_serial_number" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_serial_number" class="ml-2 text-sm text-gray-700">Número de Serie</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="batch" id="field_batch" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_batch" class="ml-2 text-sm text-gray-700">Lote</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="group" id="field_group" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_group" class="ml-2 text-sm text-gray-700">Grupo</label>
+                            </div>
+
+                            <!-- Sección 2: Clasificación y Origen -->
+                            <div class="col-span-2 mt-2 mb-1">
+                                <span class="font-medium text-gray-700">Clasificación y Origen:</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="brand" id="field_brand" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked>
+                                <label for="field_brand" class="ml-2 text-sm text-gray-700">Marca</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="specialty_area" id="field_specialty_area" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_specialty_area" class="ml-2 text-sm text-gray-700">Área/Especialidad</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="supplier" id="field_supplier" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked>
+                                <label for="field_supplier" class="ml-2 text-sm text-gray-700">Proveedor</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="brand_reference" id="field_brand_reference" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_brand_reference" class="ml-2 text-sm text-gray-700">Referencia Marca</label>
+                            </div>
+
+                            <!-- Sección 3: Datos Operativos -->
+                            <div class="col-span-2 mt-2 mb-1">
+                                <span class="font-medium text-gray-700">Datos Operativos:</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="location" id="field_location" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_location" class="ml-2 text-sm text-gray-700">Ubicación</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="manufacturer_unit" id="field_manufacturer_unit" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_manufacturer_unit" class="ml-2 text-sm text-gray-700">Unidad de Medida</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="freight_company" id="field_freight_company" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_freight_company" class="ml-2 text-sm text-gray-700">Fletera</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="freight_cost" id="field_freight_cost" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_freight_cost" class="ml-2 text-sm text-gray-700">Costo de Flete</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="expiration_date" id="field_expiration_date" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_expiration_date" class="ml-2 text-sm text-gray-700">Fecha de Caducidad</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="quantity" id="field_quantity" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked>
+                                <label for="field_quantity" class="ml-2 text-sm text-gray-700">Cantidad</label>
+                            </div>
+
+                            <!-- Sección 4: Información Adicional -->
+                            <div class="col-span-2 mt-2 mb-1">
+                                <span class="font-medium text-gray-700">Información Adicional:</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="description" id="field_description" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_description" class="ml-2 text-sm text-gray-700">Descripción</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="created_at" id="field_created_at" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_created_at" class="ml-2 text-sm text-gray-700">Fecha de Creación</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="fields[]" value="creator" id="field_creator" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                <label for="field_creator" class="ml-2 text-sm text-gray-700">Creado por</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-6">
+                        <button type="button" onclick="toggleAllFields()" class="text-sm text-indigo-600 hover:text-indigo-800">
+                            Seleccionar/Deseleccionar todos
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Exportar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openExportModal() {
+        document.getElementById('exportModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeExportModal() {
+        document.getElementById('exportModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    let allFieldsSelected = true;
+    function toggleAllFields() {
+        const checkboxes = document.querySelectorAll('input[name="fields[]"]');
+        allFieldsSelected = !allFieldsSelected;
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = allFieldsSelected;
+        });
+    }
 </script>
