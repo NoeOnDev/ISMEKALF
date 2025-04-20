@@ -197,22 +197,12 @@
                                         step="0.01" name="freight_cost" :value="old('freight_cost')" />
                                     <x-input-error :messages="$errors->get('freight_cost')" class="mt-2" />
                                 </div>
+                            </div>
 
-                                <!-- Caducidad -->
-                                <div>
-                                    <x-input-label for="expiration_date" :value="__('Caducidad')" />
-                                    <x-text-input id="expiration_date" class="block mt-1 w-full" type="date"
-                                        name="expiration_date" :value="old('expiration_date')" />
-                                    <x-input-error :messages="$errors->get('expiration_date')" class="mt-2" />
-                                </div>
-
-                                <!-- Cantidad -->
-                                <div>
-                                    <x-input-label for="quantity" :value="__('Cantidad')" />
-                                    <x-text-input id="quantity" class="block mt-1 w-full" type="number"
-                                        name="quantity" :value="old('quantity') ?? 0" required />
-                                    <x-input-error :messages="$errors->get('quantity')" class="mt-2" />
-                                </div>
+                            <!-- Agregar después de los campos de datos operativos -->
+                            <div class="col-span-2 mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-700">
+                                <p><strong>Nota:</strong> La cantidad y fecha de caducidad se establecerán al agregar
+                                    inventario al producto después de crearlo.</p>
                             </div>
 
                             <!-- Descripción -->

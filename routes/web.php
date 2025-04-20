@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductBatchController;
 use Illuminate\Support\Facades\Route;
 
 // Redireccionar la ruta principal al login
@@ -52,6 +53,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
     });
+
+    // Rutas para la gestión de inventario (lotes)
+    Route::get('/products/{product}/batches', [ProductBatchController::class, 'index'])->name('products.batches.index');
+    Route::get('/products/{product}/batches/create', [ProductBatchController::class, 'create'])->name('products.batches.create');
+    Route::post('/products/{product}/batches', [ProductBatchController::class, 'store'])->name('products.batches.store');
+    Route::delete('/product-batches/{batch}', [ProductBatchController::class, 'destroy'])->name('products.batches.destroy');
 });
 
 // Dentro del grupo de rutas que requiere autenticación

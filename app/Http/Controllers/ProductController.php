@@ -90,10 +90,9 @@ class ProductController extends Controller
             'manufacturer_unit' => 'nullable|string|max:50',
             'freight_company' => 'nullable|string|max:100',
             'freight_cost' => 'nullable|numeric|min:0',
-            'expiration_date' => 'nullable|date',
-            'quantity' => 'required|integer|min:0',
+            // Ya no se validan expiration_date ni quantity
             'description' => 'nullable|string|max:1000',
-            'image' => 'nullable|image|max:2048', // Máximo 2MB
+            'image' => 'nullable|image|max:2048',
         ], $messages);
 
         // Manejar la carga de la imagen
@@ -162,8 +161,7 @@ class ProductController extends Controller
             'manufacturer_unit' => 'nullable|string|max:50',
             'freight_company' => 'nullable|string|max:100',
             'freight_cost' => 'nullable|numeric|min:0',
-            'expiration_date' => 'nullable|date',
-            'quantity' => 'required|integer|min:0',
+            // Ya no se validan expiration_date ni quantity
             'description' => 'nullable|string|max:1000',
             'image' => 'nullable|image|max:2048',
         ], $messages);

@@ -161,22 +161,6 @@
                                     <x-input-error :messages="$errors->get('freight_cost')" class="mt-2" />
                                 </div>
 
-                                <div>
-                                    <x-input-label for="expiration_date" value="Fecha de Caducidad" />
-                                    <input type="date" name="expiration_date" id="expiration_date"
-                                        value="{{ old('expiration_date', $product->expiration_date ? $product->expiration_date->format('Y-m-d') : '') }}"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <x-input-error :messages="$errors->get('expiration_date')" class="mt-2" />
-                                </div>
-
-                                <div>
-                                    <x-input-label for="quantity" value="Cantidad" />
-                                    <input type="number" min="0" name="quantity" id="quantity"
-                                        value="{{ old('quantity', $product->quantity) }}" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <x-input-error :messages="$errors->get('quantity')" class="mt-2" />
-                                </div>
-
                                 <div class="md:col-span-2">
                                     <x-input-label for="description" value="Descripción" />
                                     <textarea name="description" id="description" rows="3"

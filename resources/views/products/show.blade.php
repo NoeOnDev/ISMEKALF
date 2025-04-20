@@ -98,6 +98,40 @@
                         </div>
                     </div>
 
+                    <!-- Sección de información de inventario -->
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Inventario</h3>
+                            <a href="{{ route('products.batches.create', $product) }}"
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
+                                <i class="fas fa-plus mr-1"></i> Agregar Inventario
+                            </a>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-sm"><span class="font-medium">Cantidad Total:</span>
+                                {{ $product->getTotalQuantityAttribute() }}</p>
+
+                            @if ($product->getExpiringBatchesAttribute()->count() > 0)
+                                <div class="mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+                                    <p class="font-bold">¡Atención! Lotes próximos a caducar:</p>
+                                    <ul class="ml-6 list-disc">
+                                        @foreach ($product->getExpiringBatchesAttribute() as $batch)
+                                            <li>Lote: {{ $batch->batch_number ?? 'Sin número' }} - Caduca:
+                                                {{ $batch->expiration_date->format('d/m/Y') }} ({{ $batch->quantity }}
+                                                unidades)</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+
+                        <a href="{{ route('products.batches.index', $product) }}"
+                            class="text-indigo-600 hover:text-indigo-900">
+                            Ver todos los lotes →
+                        </a>
+                    </div>
+
                     @if (auth()->user()->hasRole('administrador') || $product->created_by == auth()->id())
                         <div class="mt-6 flex justify-between">
                             <a href="{{ route('products.edit', $product) }}"

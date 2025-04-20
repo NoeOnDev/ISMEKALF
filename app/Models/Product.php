@@ -55,4 +55,28 @@ class Product extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    // Agregar la relación de batches al modelo Product
+    public function batches()
+    {
+        return $this->hasMany(ProductBatch::class);
+    }
+
+    // Método para obtener la cantidad total del producto
+    public function getTotalQuantityAttribute()
+    {
+        return $this->batches()->sum('quantity');
+    }
+
+    // Método para obtener lotes próximos a caducar (30 días)
+    public function getExpiringBatchesAttribute()
+    {
+        $thirtyDaysFromNow = now()->addDays(30);
+        return $this->batches()
+            ->whereNotNull('expiration_date')
+            ->where('expiration_date', '<=', $thirtyDaysFromNow)
+            ->where('expiration_date', '>=', now())
+            ->where('quantity', '>', 0)
+            ->get();
+    }
 }

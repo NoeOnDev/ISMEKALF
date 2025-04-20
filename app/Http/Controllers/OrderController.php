@@ -137,8 +137,28 @@ class OrderController extends Controller
                     'quantity' => $item['quantity'],
                 ]);
 
-                // Actualizar inventario
-                $product->quantity -= $item['quantity'];
+                // Actualizar inventario considerando los lotes
+                $quantityToReduce = $item['quantity'];
+
+                // Obtener lotes con inventario disponible, ordenados por fecha de caducidad (primero los que caducan antes)
+                $batches = $product->batches()
+                    ->where('quantity', '>', 0)
+                    ->orderBy('expiration_date', 'asc')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+                foreach ($batches as $batch) {
+                    if ($quantityToReduce <= 0) break;
+
+                    $quantityFromBatch = min($batch->quantity, $quantityToReduce);
+                    $batch->quantity -= $quantityFromBatch;
+                    $batch->save();
+
+                    $quantityToReduce -= $quantityFromBatch;
+                }
+
+                // Actualizar cantidad total del producto
+                $product->quantity = $product->getTotalQuantityAttribute();
                 $product->save();
             }
 
