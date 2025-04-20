@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Panel') }}
             </h2>
-            <div class="space-x-2">
+            <div class="flex space-x-2">
                 <a href="{{ route('orders.create.step1') }}"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     Nueva Remisión

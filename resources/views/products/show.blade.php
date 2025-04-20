@@ -142,12 +142,12 @@
         function openImageModal(imageSrc) {
             document.getElementById('modalImage').src = imageSrc;
             document.getElementById('imageModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevenir scroll en el body
+            document.body.style.overflow = 'hidden';
         }
 
         function closeImageModal() {
             document.getElementById('imageModal').classList.add('hidden');
-            document.body.style.overflow = ''; // Restaurar scroll
+            document.body.style.overflow = '';
         }
     </script>
 </x-app-layout>
