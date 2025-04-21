@@ -59,7 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{product}/batches/create', [ProductBatchController::class, 'create'])->name('products.batches.create');
     Route::post('/products/{product}/batches', [ProductBatchController::class, 'store'])->name('products.batches.store');
     Route::delete('/product-batches/{batch}', [ProductBatchController::class, 'destroy'])->name('products.batches.destroy');
+    Route::get('/batches/{batch}', [ProductBatchController::class, 'show'])->name('products.batches.show');
 });
+
+// Rutas para inventario global (todos los lotes)
+Route::get('/inventory', [ProductBatchController::class, 'allBatches'])->name('inventory.index');
+Route::post('/inventory/export', [ProductBatchController::class, 'exportAllBatches'])->name('inventory.export');
 
 // Dentro del grupo de rutas que requiere autenticación
 Route::middleware(['auth', 'role:administrador'])->group(function () {

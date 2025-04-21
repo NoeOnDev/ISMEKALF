@@ -25,6 +25,9 @@
                     <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
                         {{ __('Remisiones') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('inventory.index')" :active="request()->routeIs('inventory.index')">
+                        {{ __('Inventario General') }}
+                    </x-nav-link>
                     @if (auth()->user()->hasRole('administrador'))
                         <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
                             {{ __('Usuarios') }}
