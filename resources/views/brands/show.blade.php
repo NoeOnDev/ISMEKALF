@@ -1,12 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Detalles de la Marca') }}
             </h2>
-            <a href="{{ route('brands.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Volver al listado
-            </a>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('brands.index') }}"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Volver al listado
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -61,7 +64,8 @@
                                     @forelse ($brand->products as $product)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $product->name }}
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-500">{{ $product->model ?? 'N/A' }}</div>

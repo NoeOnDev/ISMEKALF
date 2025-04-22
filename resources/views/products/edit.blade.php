@@ -1,13 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Editar Producto') }}
             </h2>
-            <a href="{{ route('products.index') }}"
-                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Volver al listado
-            </a>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('products.index') }}"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Volver al listado
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -15,7 +17,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('products.update', $product) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -126,7 +129,8 @@
                         </div>
 
                         <div class="mb-6">
-                            <h3 class="text-lg font-medium mb-4 pb-2 border-b">Sección 3: Datos Operativos y Adicionales
+                            <h3 class="text-lg font-medium mb-4 pb-2 border-b">Sección 3: Datos Operativos y
+                                Adicionales
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>

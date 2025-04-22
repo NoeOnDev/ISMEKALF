@@ -1,13 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Gestión de Proveedores') }}
             </h2>
-            <a href="{{ route('suppliers.create') }}"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Crear Proveedor
-            </a>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('suppliers.create') }}"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Crear Proveedor
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -42,8 +44,10 @@
                                 <select name="active" id="active"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">Todos</option>
-                                    <option value="1" {{ request('active') == '1' ? 'selected' : '' }}>Activos</option>
-                                    <option value="0" {{ request('active') == '0' ? 'selected' : '' }}>Inactivos</option>
+                                    <option value="1" {{ request('active') == '1' ? 'selected' : '' }}>Activos
+                                    </option>
+                                    <option value="0" {{ request('active') == '0' ? 'selected' : '' }}>Inactivos
+                                    </option>
                                 </select>
                             </div>
 
@@ -95,7 +99,8 @@
                                             <div class="text-sm font-medium text-gray-900">{{ $supplier->name }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $supplier->contact_name ?? 'N/A' }}</div>
+                                            <div class="text-sm text-gray-500">{{ $supplier->contact_name ?? 'N/A' }}
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-500">{{ $supplier->email ?? 'N/A' }}</div>

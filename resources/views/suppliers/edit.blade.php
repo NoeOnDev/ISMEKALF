@@ -1,12 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Editar Proveedor') }}
             </h2>
-            <a href="{{ route('suppliers.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Volver al listado
-            </a>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('suppliers.index') }}"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Volver al listado
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -22,70 +25,80 @@
                             <!-- Nombre -->
                             <div>
                                 <x-input-label for="name" :value="__('Nombre')" />
-                                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $supplier->name)" required autofocus />
+                                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
+                                    :value="old('name', $supplier->name)" required autofocus />
                                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
                             </div>
 
                             <!-- Nombre del Contacto -->
                             <div>
                                 <x-input-label for="contact_name" :value="__('Nombre del Contacto')" />
-                                <x-text-input id="contact_name" class="block mt-1 w-full" type="text" name="contact_name" :value="old('contact_name', $supplier->contact_name)" />
+                                <x-text-input id="contact_name" class="block mt-1 w-full" type="text"
+                                    name="contact_name" :value="old('contact_name', $supplier->contact_name)" />
                                 <x-input-error :messages="$errors->get('contact_name')" class="mt-2" />
                             </div>
 
                             <!-- Email -->
                             <div>
                                 <x-input-label for="email" :value="__('Email')" />
-                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $supplier->email)" />
+                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                    :value="old('email', $supplier->email)" />
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                             </div>
 
                             <!-- Teléfono -->
                             <div>
                                 <x-input-label for="phone" :value="__('Teléfono')" />
-                                <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $supplier->phone)" />
+                                <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone"
+                                    :value="old('phone', $supplier->phone)" />
                                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                             </div>
 
                             <!-- Dirección -->
                             <div>
                                 <x-input-label for="address" :value="__('Dirección')" />
-                                <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address', $supplier->address)" />
+                                <x-text-input id="address" class="block mt-1 w-full" type="text" name="address"
+                                    :value="old('address', $supplier->address)" />
                                 <x-input-error :messages="$errors->get('address')" class="mt-2" />
                             </div>
 
                             <!-- Ciudad -->
                             <div>
                                 <x-input-label for="city" :value="__('Ciudad')" />
-                                <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $supplier->city)" />
+                                <x-text-input id="city" class="block mt-1 w-full" type="text" name="city"
+                                    :value="old('city', $supplier->city)" />
                                 <x-input-error :messages="$errors->get('city')" class="mt-2" />
                             </div>
 
                             <!-- País -->
                             <div>
                                 <x-input-label for="country" :value="__('País')" />
-                                <x-text-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country', $supplier->country)" />
+                                <x-text-input id="country" class="block mt-1 w-full" type="text" name="country"
+                                    :value="old('country', $supplier->country)" />
                                 <x-input-error :messages="$errors->get('country')" class="mt-2" />
                             </div>
 
                             <!-- Código Postal -->
                             <div>
                                 <x-input-label for="postal_code" :value="__('Código Postal')" />
-                                <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code" :value="old('postal_code', $supplier->postal_code)" />
+                                <x-text-input id="postal_code" class="block mt-1 w-full" type="text"
+                                    name="postal_code" :value="old('postal_code', $supplier->postal_code)" />
                                 <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
                             </div>
 
                             <!-- Notas -->
                             <div class="col-span-1 md:col-span-2">
                                 <x-input-label for="notes" :value="__('Notas')" />
-                                <textarea id="notes" name="notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('notes', $supplier->notes) }}</textarea>
+                                <textarea id="notes" name="notes" rows="3"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('notes', $supplier->notes) }}</textarea>
                                 <x-input-error :messages="$errors->get('notes')" class="mt-2" />
                             </div>
 
                             <!-- Activo -->
                             <div class="col-span-1 md:col-span-2">
                                 <label class="inline-flex items-center">
-                                    <input type="checkbox" name="active" value="1" {{ $supplier->active ? 'checked' : '' }}
+                                    <input type="checkbox" name="active" value="1"
+                                        {{ $supplier->active ? 'checked' : '' }}
                                         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                     <span class="ml-2">Activo</span>
                                 </label>

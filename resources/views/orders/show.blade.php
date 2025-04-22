@@ -1,12 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Detalle de Remisión #') . $order->remission_number }}
             </h2>
-            <a href="{{ route('orders.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Volver al listado
-            </a>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('orders.index') }}"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Volver al listado
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -23,17 +26,19 @@
                     <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
                         <div class="mb-4 md:mb-0">
                             <h3 class="text-lg font-semibold">Información de Remisión</h3>
-                            <p class="mt-2"><span class="font-semibold">Número:</span> {{ $order->remission_number }}</p>
+                            <p class="mt-2"><span class="font-semibold">Número:</span> {{ $order->remission_number }}
+                            </p>
                             <p><span class="font-semibold">Estado:</span>
-                                @if($order->status == 'completed')
+                                @if ($order->status == 'completed')
                                     <span class="text-green-600">Completada</span>
                                 @else
                                     <span class="text-red-600">Cancelada</span>
                                 @endif
                             </p>
-                            <p><span class="font-semibold">Fecha:</span> {{ $order->created_at->format('d/m/Y H:i') }}</p>
+                            <p><span class="font-semibold">Fecha:</span> {{ $order->created_at->format('d/m/Y H:i') }}
+                            </p>
                             <p><span class="font-semibold">Creado por:</span> {{ $order->creator->name }}</p>
-                            @if($order->notes)
+                            @if ($order->notes)
                                 <p class="mt-2"><span class="font-semibold">Notas:</span> {{ $order->notes }}</p>
                             @endif
                         </div>
@@ -42,16 +47,16 @@
                             <h3 class="text-lg font-semibold mb-2">Datos del Cliente</h3>
                             <p><span class="font-semibold">Nombre:</span> {{ $order->client->name }}</p>
                             <p><span class="font-semibold">Código:</span> {{ $order->client->code }}</p>
-                            @if($order->client->contact)
+                            @if ($order->client->contact)
                                 <p><span class="font-semibold">Contacto:</span> {{ $order->client->contact }}</p>
                             @endif
-                            @if($order->client->phone)
+                            @if ($order->client->phone)
                                 <p><span class="font-semibold">Teléfono:</span> {{ $order->client->phone }}</p>
                             @endif
-                            @if($order->client->version)
+                            @if ($order->client->version)
                                 <p><span class="font-semibold">Versión:</span> {{ $order->client->version }}</p>
                             @endif
-                            @if($order->client->address)
+                            @if ($order->client->address)
                                 <p><span class="font-semibold">Dirección:</span> {{ $order->client->address }}</p>
                             @endif
                         </div>
@@ -63,27 +68,38 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marca</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Producto</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Marca</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Cantidad</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Ubicación</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($order->items as $item)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ $item->product->name }}</div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $item->product->name }}
+                                            </div>
                                             <div class="text-sm text-gray-500">{{ $item->product->model }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $item->product->brand->name ?? 'N/A' }}</div>
+                                            <div class="text-sm text-gray-500">
+                                                {{ $item->product->brand->name ?? 'N/A' }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ $item->quantity }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $item->product->location ?? 'N/A' }}</div>
+                                            <div class="text-sm text-gray-500">{{ $item->product->location ?? 'N/A' }}
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -91,12 +107,14 @@
                         </table>
                     </div>
 
-                    @if($order->status === 'completed' && Auth::user()->hasRole('administrador'))
+                    @if ($order->status === 'completed' && Auth::user()->hasRole('administrador'))
                         <div class="mt-6 flex justify-end">
-                            <form action="{{ route('orders.destroy', $order) }}" method="POST" onsubmit="return confirm('¿Está seguro de cancelar esta remisión? Esta acción revertirá el inventario.')">
+                            <form action="{{ route('orders.destroy', $order) }}" method="POST"
+                                onsubmit="return confirm('¿Está seguro de cancelar esta remisión? Esta acción revertirá el inventario.')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                     Cancelar Remisión
                                 </button>
                             </form>

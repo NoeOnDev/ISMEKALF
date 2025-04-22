@@ -1,15 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col md:flex-row md:items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Inventario General') }}
             </h2>
-            @if (auth()->user()->hasRole('administrador'))
-                <button onclick="openExportModal()"
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                    <i class="fas fa-file-export mr-1"></i> Exportar CSV
-                </button>
-            @endif
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                @if (auth()->user()->hasRole('administrador'))
+                    <button onclick="openExportModal()"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
+                        <i class="fas fa-file-export mr-1"></i> Exportar CSV
+                    </button>
+                @endif
+            </div>
         </div>
     </x-slot>
 
@@ -91,22 +93,28 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Producto
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Lote
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Cantidad
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Caducidad
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Fecha Creación
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Acciones
                                     </th>
                                 </tr>
@@ -126,14 +134,16 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $batch->batch_number ?? 'N/A' }}</div>
+                                            <div class="text-sm text-gray-900">{{ $batch->batch_number ?? 'N/A' }}
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ $batch->quantity }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if ($batch->expiration_date)
-                                                <div class="text-sm {{ $batch->expiration_date->isPast() ? 'text-red-600' : ($batch->expiration_date->diffInDays(now()) < 30 ? 'text-yellow-600' : 'text-gray-900') }}">
+                                                <div
+                                                    class="text-sm {{ $batch->expiration_date->isPast() ? 'text-red-600' : ($batch->expiration_date->diffInDays(now()) < 30 ? 'text-yellow-600' : 'text-gray-900') }}">
                                                     {{ $batch->expiration_date->format('d/m/Y') }}
                                                 </div>
                                             @else
@@ -141,7 +151,8 @@
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $batch->created_at->format('d/m/Y') }}</div>
+                                            <div class="text-sm text-gray-900">
+                                                {{ $batch->created_at->format('d/m/Y') }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('products.batches.show', $batch) }}"

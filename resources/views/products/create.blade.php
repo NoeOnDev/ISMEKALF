@@ -1,8 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Crear Nuevo Producto') }}
-        </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
+                {{ __('Crear Nuevo Producto') }}
+            </h2>
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
+                <a href="{{ route('products.index') }}"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                    Volver al listado
+                </a>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -110,14 +118,17 @@
                                 <div>
                                     <x-input-label for="brand_id" :value="__('Marca')" />
                                     <div class="flex">
-                                        <select id="brand_id" name="brand_id" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 rounded-r-none">
+                                        <select id="brand_id" name="brand_id"
+                                            class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 rounded-r-none">
                                             <option value="">Seleccionar marca</option>
                                             @foreach ($brands as $brand)
-                                                <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>
+                                                <option value="{{ $brand->id }}"
+                                                    {{ old('brand_id') == $brand->id ? 'selected' : '' }}>
                                                     {{ $brand->name }}</option>
                                             @endforeach
                                         </select>
-                                        <button type="button" onclick="openBrandModal()" class="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l-none">
+                                        <button type="button" onclick="openBrandModal()"
+                                            class="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l-none">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -136,14 +147,17 @@
                                 <div>
                                     <x-input-label for="supplier_id" :value="__('Proveedor')" />
                                     <div class="flex">
-                                        <select id="supplier_id" name="supplier_id" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 rounded-r-none">
+                                        <select id="supplier_id" name="supplier_id"
+                                            class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 rounded-r-none">
                                             <option value="">Seleccionar proveedor</option>
                                             @foreach ($suppliers as $supplier)
-                                                <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                                <option value="{{ $supplier->id }}"
+                                                    {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
                                                     {{ $supplier->name }}</option>
                                             @endforeach
                                         </select>
-                                        <button type="button" onclick="openSupplierModal()" class="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l-none">
+                                        <button type="button" onclick="openSupplierModal()"
+                                            class="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l-none">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -265,20 +279,25 @@
                         @csrf
                         <div class="mb-4">
                             <x-input-label for="brand_name" value="Nombre de la Marca" />
-                            <x-text-input id="brand_name" class="block mt-1 w-full" type="text" name="name" required />
+                            <x-text-input id="brand_name" class="block mt-1 w-full" type="text" name="name"
+                                required />
                             <div id="brand_name_error" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="brand_description" value="Descripción" />
-                            <textarea id="brand_description" name="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3"></textarea>
+                            <textarea id="brand_description" name="description"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                rows="3"></textarea>
                         </div>
 
                         <div class="flex justify-end mt-6">
-                            <button type="button" onclick="closeBrandModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <button type="button" onclick="closeBrandModal()"
+                                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
                                 Cancelar
                             </button>
-                            <button type="button" id="saveBrandBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="button" id="saveBrandBtn"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Guardar Marca
                             </button>
                         </div>
@@ -295,7 +314,8 @@
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-gray-900">Crear Nuevo Proveedor</h3>
-                        <button type="button" onclick="closeSupplierModal()" class="text-gray-500 hover:text-gray-800">
+                        <button type="button" onclick="closeSupplierModal()"
+                            class="text-gray-500 hover:text-gray-800">
                             <span class="text-2xl">&times;</span>
                         </button>
                     </div>
@@ -304,30 +324,36 @@
                         @csrf
                         <div class="mb-4">
                             <x-input-label for="supplier_name" value="Nombre del Proveedor" />
-                            <x-text-input id="supplier_name" class="block mt-1 w-full" type="text" name="name" required />
+                            <x-text-input id="supplier_name" class="block mt-1 w-full" type="text" name="name"
+                                required />
                             <div id="supplier_name_error" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="supplier_contact_name" value="Nombre de Contacto" />
-                            <x-text-input id="supplier_contact_name" class="block mt-1 w-full" type="text" name="contact_name" />
+                            <x-text-input id="supplier_contact_name" class="block mt-1 w-full" type="text"
+                                name="contact_name" />
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="supplier_email" value="Correo Electrónico" />
-                            <x-text-input id="supplier_email" class="block mt-1 w-full" type="email" name="email" />
+                            <x-text-input id="supplier_email" class="block mt-1 w-full" type="email"
+                                name="email" />
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="supplier_phone" value="Teléfono" />
-                            <x-text-input id="supplier_phone" class="block mt-1 w-full" type="text" name="phone" />
+                            <x-text-input id="supplier_phone" class="block mt-1 w-full" type="text"
+                                name="phone" />
                         </div>
 
                         <div class="flex justify-end mt-6">
-                            <button type="button" onclick="closeSupplierModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
+                            <button type="button" onclick="closeSupplierModal()"
+                                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
                                 Cancelar
                             </button>
-                            <button type="button" id="saveSupplierBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="button" id="saveSupplierBtn"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Guardar Proveedor
                             </button>
                         </div>
@@ -396,42 +422,42 @@
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('/api/brands', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token
-                },
-                body: JSON.stringify({
-                    name: brandName,
-                    description: brandDescription,
-                    active: true
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({
+                        name: brandName,
+                        description: brandDescription,
+                        active: true
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('brand_name_error').textContent = data.error;
-                    document.getElementById('brand_name_error').classList.remove('hidden');
-                    return;
-                }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('brand_name_error').textContent = data.error;
+                        document.getElementById('brand_name_error').classList.remove('hidden');
+                        return;
+                    }
 
-                // Añadir la nueva marca al select
-                const brandSelect = document.getElementById('brand_id');
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.text = data.name;
-                newOption.selected = true;
-                brandSelect.add(newOption);
+                    // Añadir la nueva marca al select
+                    const brandSelect = document.getElementById('brand_id');
+                    const newOption = document.createElement('option');
+                    newOption.value = data.id;
+                    newOption.text = data.name;
+                    newOption.selected = true;
+                    brandSelect.add(newOption);
 
-                // Mostrar mensaje de éxito y cerrar el modal
-                closeBrandModal();
+                    // Mostrar mensaje de éxito y cerrar el modal
+                    closeBrandModal();
 
-                // Opcional: Mostrar una notificación de éxito
-                alert('Marca creada con éxito');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                    // Opcional: Mostrar una notificación de éxito
+                    alert('Marca creada con éxito');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
 
         // Función para crear un proveedor por Ajax
@@ -443,44 +469,44 @@
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('/api/suppliers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token
-                },
-                body: JSON.stringify({
-                    name: supplierName,
-                    contact_name: contactName,
-                    email: email,
-                    phone: phone,
-                    active: true
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({
+                        name: supplierName,
+                        contact_name: contactName,
+                        email: email,
+                        phone: phone,
+                        active: true
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('supplier_name_error').textContent = data.error;
-                    document.getElementById('supplier_name_error').classList.remove('hidden');
-                    return;
-                }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('supplier_name_error').textContent = data.error;
+                        document.getElementById('supplier_name_error').classList.remove('hidden');
+                        return;
+                    }
 
-                // Añadir el nuevo proveedor al select
-                const supplierSelect = document.getElementById('supplier_id');
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.text = data.name;
-                newOption.selected = true;
-                supplierSelect.add(newOption);
+                    // Añadir el nuevo proveedor al select
+                    const supplierSelect = document.getElementById('supplier_id');
+                    const newOption = document.createElement('option');
+                    newOption.value = data.id;
+                    newOption.text = data.name;
+                    newOption.selected = true;
+                    supplierSelect.add(newOption);
 
-                // Mostrar mensaje de éxito y cerrar el modal
-                closeSupplierModal();
+                    // Mostrar mensaje de éxito y cerrar el modal
+                    closeSupplierModal();
 
-                // Opcional: Mostrar una notificación de éxito
-                alert('Proveedor creado con éxito');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                    // Opcional: Mostrar una notificación de éxito
+                    alert('Proveedor creado con éxito');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     </script>
 </x-app-layout>
