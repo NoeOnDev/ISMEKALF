@@ -28,15 +28,17 @@
                     <x-nav-link :href="route('inventory.index')" :active="request()->routeIs('inventory.index')">
                         {{ __('Inventario General') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('brands.index')" :active="request()->routeIs('brands.*')">
+                        {{ __('Marcas') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">
+                        {{ __('Proveedores') }}
+                    </x-nav-link>
                     @if (auth()->user()->hasRole('administrador'))
                         <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
                             {{ __('Usuarios') }}
                         </x-nav-link>
                     @endif
-
-                    {{-- <x-nav-link :href="route('inventory')" :active="request()->routeIs('inventory')">
-                        {{ __('Inventario') }}
-                    </x-nav-link> --}}
                 </div>
             </div>
 

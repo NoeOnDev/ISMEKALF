@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductBatchController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 // Redireccionar la ruta principal al login
@@ -70,5 +72,8 @@ Route::post('/inventory/export', [ProductBatchController::class, 'exportAllBatch
 Route::middleware(['auth', 'role:administrador'])->group(function () {
     Route::post('/products/export', [ProductController::class, 'export'])->name('products.export');
 });
+
+Route::resource('brands', BrandController::class);
+Route::resource('suppliers', SupplierController::class);
 
 require __DIR__ . '/auth.php';
