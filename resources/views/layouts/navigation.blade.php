@@ -100,8 +100,31 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Panel') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                {{ __('Productos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('clients.index')" :active="request()->routeIs('clients.*')">
+                {{ __('Clientes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                {{ __('Remisiones') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('inventory.index')" :active="request()->routeIs('inventory.index')">
+                {{ __('Inventario General') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('brands.index')" :active="request()->routeIs('brands.*')">
+                {{ __('Marcas') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">
+                {{ __('Proveedores') }}
+            </x-responsive-nav-link>
+            @if (auth()->user()->hasRole('administrador'))
+                <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+                    {{ __('Usuarios') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

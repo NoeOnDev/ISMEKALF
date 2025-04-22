@@ -1,18 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <div class="flex flex-col md:flex-row md:items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 md:mb-0">
                 {{ __('Productos') }}
             </h2>
-            <div class="flex space-x-2">
+            <div class="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto md:ml-auto">
                 @if (auth()->user()->hasRole('administrador'))
                     <button onclick="openExportModal()"
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
                         <i class="fas fa-file-export mr-1"></i> Exportar CSV
                     </button>
                 @endif
                 <a href="{{ route('products.create') }}"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
                     Nuevo Producto
                 </a>
             </div>
