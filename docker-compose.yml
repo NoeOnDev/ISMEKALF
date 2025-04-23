@@ -1,0 +1,70 @@
+version: '3'
+services:
+  # Servicio PHP-FPM
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ismekalf-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - ismekalf-network
+    depends_on:
+      - db
+
+  # Servidor web Nginx
+  webserver:
+    image: nginx:alpine
+    container_name: ismekalf-webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - ismekalf-network
+    depends_on:
+      - app
+
+  # Servicio de base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: ismekalf-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ismekalf
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      SERVICE_NAME: mysql
+    volumes:
+      - ismekalf-data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - ismekalf-network
+
+  # Servicio Node para Vite
+  node:
+    image: node:18
+    container_name: ismekalf-node
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    networks:
+      - ismekalf-network
+    command: bash -c "npm install && npm run dev"
+
+networks:
+  ismekalf-network:
+    driver: bridge
+
+volumes:
+  ismekalf-data:
+    driver: local
