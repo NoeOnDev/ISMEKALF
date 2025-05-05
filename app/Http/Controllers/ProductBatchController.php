@@ -96,17 +96,20 @@ class ProductBatchController extends Controller
             }
         }
 
-        if ($request->has('product')) {
+        if ($request->filled('product')) {  // usando filled en lugar de has
             $query->where('product_id', $request->product);
         }
 
         if ($request->has('search')) {
             $search = $request->search;
-            $query->whereHas('product', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('batch', 'like', "%{$search}%");
-            })->orWhere('batch_number', 'like', "%{$search}%");
+            $query->where(function($q) use ($search) {
+                $q->whereHas('product', function($subq) use ($search) {
+                    $subq->where('name', 'like', "%{$search}%")
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('batch', 'like', "%{$search}%");
+                })
+                ->orWhere('batch_number', 'like', "%{$search}%");
+            });
         }
 
         // Ordenamiento
@@ -164,17 +167,20 @@ class ProductBatchController extends Controller
             }
         }
 
-        if ($request->has('product')) {
+        if ($request->filled('product')) {  // usando filled en lugar de has
             $query->where('product_id', $request->product);
         }
 
         if ($request->has('search')) {
             $search = $request->search;
-            $query->whereHas('product', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('batch', 'like', "%{$search}%");
-            })->orWhere('batch_number', 'like', "%{$search}%");
+            $query->where(function($q) use ($search) {
+                $q->whereHas('product', function($subq) use ($search) {
+                    $subq->where('name', 'like', "%{$search}%")
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('batch', 'like', "%{$search}%");
+                })
+                ->orWhere('batch_number', 'like', "%{$search}%");
+            });
         }
 
         $batches = $query->get();
