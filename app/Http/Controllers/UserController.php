@@ -150,11 +150,13 @@ class UserController extends Controller
             }
         }
 
+        // Actualizar el usuario para bloquear y forzar cierre de sesión
         $user->active = false;
+        $user->remember_token = null; // Invalidar "recordarme"
         $user->save();
 
         return redirect()->route('admin.users')
-            ->with('success', 'Usuario bloqueado correctamente.');
+            ->with('success', 'Usuario bloqueado correctamente. Si tenía sesiones activas, han sido cerradas.');
     }
 
     // Método para desbloquear usuario
