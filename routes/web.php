@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
         Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::put('/admin/users/{user}/block', [UserController::class, 'block'])->name('admin.users.block');
+        Route::put('/admin/users/{user}/unblock', [UserController::class, 'unblock'])->name('admin.users.unblock');
     });
 
     // Rutas para almacén

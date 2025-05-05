@@ -90,6 +90,9 @@
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Fecha de registro
                                     </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Estado
+                                    </th>
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Acciones
@@ -119,25 +122,48 @@
                                             <div class="text-sm text-gray-500">{{ $user->created_at->format('d/m/Y') }}
                                             </div>
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($user->active)
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Activo
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                    Bloqueado
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ route('admin.users.edit', $user) }}"
                                                 class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
 
                                             @if ($user->id !== auth()->id())
-                                                <form class="inline" action="{{ route('admin.users.destroy', $user) }}"
-                                                    method="POST"
+                                                @if($user->active)
+                                                    <form class="inline" action="{{ route('admin.users.block', $user) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="text-yellow-600 hover:text-yellow-900 mr-3">Bloquear</button>
+                                                    </form>
+                                                @else
+                                                    <form class="inline" action="{{ route('admin.users.unblock', $user) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="text-green-600 hover:text-green-900 mr-3">Desbloquear</button>
+                                                    </form>
+                                                @endif
+
+                                                <form class="inline" action="{{ route('admin.users.destroy', $user) }}" method="POST"
                                                     onsubmit="return confirm('¿Estás seguro de eliminar este usuario?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="text-red-600 hover:text-red-900">Eliminar</button>
+                                                    <button type="submit" class="text-red-600 hover:text-red-900">Eliminar</button>
                                                 </form>
                                             @endif
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5"
+                                        <td colspan="6"
                                             class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
                                             No hay usuarios registrados.
                                         </td>

@@ -51,4 +51,20 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPasswordNotification($token));
     }
+
+    // Añade estas relaciones
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'created_by');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'created_by');
+    }
+
+    public function productBatches()
+    {
+        return $this->hasMany(ProductBatch::class, 'created_by');
+    }
 }
