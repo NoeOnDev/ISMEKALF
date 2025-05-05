@@ -26,8 +26,8 @@ class SupplierController extends Controller
         }
 
         // Filtro por estado
-        if ($request->has('active') && $request->active !== '') {
-            $query->where('active', $request->active);
+        if ($request->filled('active')) {
+            $query->where('active', $request->active == '1');
         }
 
         $suppliers = $query->latest()->paginate(10)->withQueryString();
