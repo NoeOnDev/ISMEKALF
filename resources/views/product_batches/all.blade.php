@@ -291,6 +291,12 @@
                                     <label for="field_created_at" class="ml-2 text-sm text-gray-700">Fecha de
                                         creación</label>
                                 </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="fields[]" value="specialty_area" id="field_specialty_area"
+                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        checked>
+                                    <label for="field_specialty_area" class="ml-2 text-sm text-gray-700">Área/Especialidad</label>
+                                </div>
                             </div>
                         </div>
 

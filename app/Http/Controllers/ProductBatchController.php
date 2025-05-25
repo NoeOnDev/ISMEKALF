@@ -237,6 +237,9 @@ class ProductBatchController extends Controller
                     case 'notes':
                         $csvHeaders[] = 'Notas';
                         break;
+                    case 'specialty_area':
+                        $csvHeaders[] = 'Área/Especialidad';
+                        break;
                 }
             }
 
@@ -290,6 +293,9 @@ class ProductBatchController extends Controller
                             break;
                         case 'notes':
                             $row[] = $batch->notes ?? 'N/A';
+                            break;
+                        case 'specialty_area':
+                            $row[] = $batch->product->specialty_area ?? 'N/A';
                             break;
                     }
                 }
