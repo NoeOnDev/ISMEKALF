@@ -70,38 +70,80 @@
                                 <tr>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Producto</th>
+                                        Producto
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Marca</th>
+                                        Marca
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Cantidad</th>
+                                        Cantidad
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Ubicación</th>
+                                        Lote
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Caducidad
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Ubicación
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($order->items as $item)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">{{ $item->product->name }}
-                                            </div>
-                                            <div class="text-sm text-gray-500">{{ $item->product->model }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">
-                                                {{ $item->product->brand->name ?? 'N/A' }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $item->quantity }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $item->product->location ?? 'N/A' }}
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <!-- Para cada item, obtener sus lotes -->
+                                    @php
+                                        $itemBatches = App\Models\OrderItemBatch::with('productBatch')
+                                            ->where('order_item_id', $item->id)
+                                            ->get()
+                                            ->map(function($itemBatch) {
+                                                return $itemBatch->productBatch;
+                                            });
+                                    @endphp
+
+                                    <!-- Si el item tiene varios lotes, ocupará varias filas -->
+                                    @foreach ($itemBatches as $index => $batch)
+                                        <tr>
+                                            <!-- Mostrar datos del producto solo en la primera fila -->
+                                            @if ($index == 0)
+                                                <td class="px-6 py-4 whitespace-nowrap"
+                                                    rowspan="{{ count($itemBatches) }}">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        {{ $item->product->name }}</div>
+                                                    <div class="text-sm text-gray-500">{{ $item->product->model }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap"
+                                                    rowspan="{{ count($itemBatches) }}">
+                                                    <div class="text-sm text-gray-500">
+                                                        {{ $item->product->brand->name ?? 'N/A' }}</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap"
+                                                    rowspan="{{ count($itemBatches) }}">
+                                                    <div class="text-sm text-gray-900">{{ $item->quantity }}</div>
+                                                </td>
+                                            @endif
+                                            <!-- Datos específicos del lote -->
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">
+                                                    {{ $batch->batch_number ?? 'Sin lote' }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">
+                                                    {{ $batch->expiration_date ? $batch->expiration_date->format('d/m/Y') : 'N/A' }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-500">{{ $batch->location ?? 'N/A' }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>

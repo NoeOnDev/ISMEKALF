@@ -25,4 +25,10 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function batches()
+    {
+        return $this->belongsToMany(ProductBatch::class, 'order_item_batches')
+            ->withPivot('quantity');
+    }
 }

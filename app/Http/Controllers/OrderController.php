@@ -6,6 +6,8 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\OrderItemBatch;
+use App\Models\ProductBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -131,16 +133,17 @@ class OrderController extends Controller
                     throw new \Exception("Cantidad insuficiente para {$product->name}");
                 }
 
-                OrderItem::create([
+                // Crear el OrderItem primero
+                $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'quantity' => $item['quantity'],
                 ]);
 
-                // Actualizar inventario considerando los lotes
+                // Actualizar inventario y registrar los lotes utilizados
                 $quantityToReduce = $item['quantity'];
 
-                // Obtener lotes con inventario disponible, ordenados por fecha de caducidad (primero los que caducan antes)
+                // Obtener lotes con inventario disponible, ordenados por fecha de caducidad
                 $batches = $product->batches()
                     ->where('quantity', '>', 0)
                     ->orderBy('expiration_date', 'asc')
@@ -153,6 +156,15 @@ class OrderController extends Controller
                     $quantityFromBatch = min($batch->quantity, $quantityToReduce);
                     $batch->quantity -= $quantityFromBatch;
                     $batch->save();
+
+                    // Guardar la relación entre el item de la orden y el lote
+                    DB::table('order_item_batches')->insert([
+                        'order_item_id' => $orderItem->id,
+                        'product_batch_id' => $batch->id,
+                        'quantity' => $quantityFromBatch,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
 
                     $quantityToReduce -= $quantityFromBatch;
                 }
@@ -192,10 +204,24 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            // Restaurar el inventario
+            // Restaurar el inventario POR LOTES específicos
             foreach ($order->items as $item) {
+                // Obtener los lotes específicos utilizados en esta remisión
+                $itemBatches = OrderItemBatch::where('order_item_id', $item->id)->get();
+
+                foreach ($itemBatches as $itemBatch) {
+                    // Obtener el lote específico
+                    $batch = ProductBatch::find($itemBatch->product_batch_id);
+                    if ($batch) {
+                        // Restaurar la cantidad al lote específico
+                        $batch->quantity += $itemBatch->quantity;
+                        $batch->save();
+                    }
+                }
+
+                // Actualizar la cantidad total del producto
                 $product = $item->product;
-                $product->quantity += $item->quantity;
+                $product->quantity = $product->getTotalQuantityAttribute();
                 $product->save();
             }
 
@@ -206,7 +232,7 @@ class OrderController extends Controller
             DB::commit();
 
             return redirect()->route('orders.index')
-                ->with('success', 'Remisión #' . $order->remission_number . ' ha sido cancelada y el inventario restaurado.');
+                ->with('success', 'Remisión #' . $order->remission_number . ' ha sido cancelada y el inventario restaurado correctamente.');
         } catch (\Exception $e) {
             DB::rollBack();
 
