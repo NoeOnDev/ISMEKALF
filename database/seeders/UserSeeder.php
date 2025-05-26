@@ -21,12 +21,12 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole('administrador');
 
-        // Crear usuario de almacén
-        $almacen = User::create([
-            'name' => 'Usuario Almacén',
-            'email' => 'almacen@example.com',
-            'password' => Hash::make('password'),
-        ]);
-        $almacen->assignRole('almacen');
+        // // Crear usuario de almacén
+        // $almacen = User::create([
+        //     'name' => 'Usuario Almacén',
+        //     'email' => 'almacen@example.com',
+        //     'password' => Hash::make('password'),
+        // ]);
+        // $almacen->assignRole('almacen');
     }
 }
